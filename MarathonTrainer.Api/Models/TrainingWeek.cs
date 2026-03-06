@@ -26,5 +26,6 @@ public class TrainingWeek
     // Navigation properties
     [JsonIgnore]
     public TrainingPlan? TrainingPlan { get; set; }
+    [JsonPropertyName("days")]
     public List<TrainingDay> TrainingDays { get; set; } = [];
 }
