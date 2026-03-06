@@ -9,12 +9,20 @@ public class TrainingPlanGenerator : ITrainingPlanGenerator
     private const double StepBackReduction = 0.25;
     private const int StepBackFrequency = 3;
 
+    private readonly TimeProvider _timeProvider;
+
+    public TrainingPlanGenerator(TimeProvider timeProvider)
+    {
+        _timeProvider = timeProvider;
+    }
+
     public TrainingPlan GeneratePlan(UserProfile profile, RaceType raceType, DateTime raceDate)
     {
         var fitness = profile.FitnessAssessment
             ?? throw new InvalidOperationException("UserProfile must have a FitnessAssessment to generate a plan.");
 
-        var today = DateTime.UtcNow.Date;
+        var now = _timeProvider.GetUtcNow();
+        var today = now.UtcDateTime.Date;
         int totalWeeks = Math.Max(MinimumWeeks, (int)((raceDate.Date - today).TotalDays / 7));
 
         var plan = new TrainingPlan
@@ -24,7 +32,7 @@ public class TrainingPlanGenerator : ITrainingPlanGenerator
             RaceDate = raceDate,
             PlanStartDate = today,
             TotalWeeks = totalWeeks,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = now.UtcDateTime
         };
 
         var phases = AssignPhases(totalWeeks);

@@ -5,7 +5,7 @@ namespace MarathonTrainer.Api.Tests;
 
 public class TrainingPlanGeneratorTests
 {
-    private readonly TrainingPlanGenerator _generator = new();
+    private readonly TrainingPlanGenerator _generator = new(TimeProvider.System);
 
     #region Helpers
 
@@ -42,6 +42,13 @@ public class TrainingPlanGeneratorTests
     private static DateTime RaceDateWeeksFromNow(int weeks)
     {
         return DateTime.UtcNow.Date.AddDays(weeks * 7);
+    }
+
+    private sealed class FixedTimeProvider : TimeProvider
+    {
+        private readonly DateTimeOffset _utcNow;
+        public FixedTimeProvider(DateTimeOffset utcNow) => _utcNow = utcNow;
+        public override DateTimeOffset GetUtcNow() => _utcNow;
     }
 
     #endregion
@@ -366,6 +373,24 @@ public class TrainingPlanGeneratorTests
 
         Assert.Throws<InvalidOperationException>(() =>
             _generator.GeneratePlan(profile, RaceType.HalfMarathon, RaceDateWeeksFromNow(16)));
+    }
+
+    #endregion
+
+    #region TimeProvider Injection
+
+    [Fact]
+    public void GeneratePlan_UsesInjectedTimeProvider_ForPlanStartDateAndCreatedAt()
+    {
+        var fixedUtc = new DateTimeOffset(2025, 6, 1, 0, 0, 0, TimeSpan.Zero);
+        var generator = new TrainingPlanGenerator(new FixedTimeProvider(fixedUtc));
+        var profile = CreateProfile();
+        var raceDate = fixedUtc.UtcDateTime.AddDays(16 * 7);
+
+        var plan = generator.GeneratePlan(profile, RaceType.HalfMarathon, raceDate);
+
+        Assert.Equal(fixedUtc.UtcDateTime.Date, plan.PlanStartDate);
+        Assert.Equal(fixedUtc.UtcDateTime, plan.CreatedAt);
     }
 
     #endregion
