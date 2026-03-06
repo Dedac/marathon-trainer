@@ -5,7 +5,7 @@ namespace MarathonTrainer.Api.Tests;
 
 public class MedicalAdjustmentServiceTests
 {
-    private readonly TrainingPlanGenerator _generator = new();
+    private readonly TrainingPlanGenerator _generator = new(TimeProvider.System);
     private readonly MedicalAdjustmentService _medicalService = new();
 
     #region Helpers

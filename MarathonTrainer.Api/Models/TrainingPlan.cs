@@ -28,5 +28,6 @@ public class TrainingPlan
     // Navigation properties
     [JsonIgnore]
     public UserProfile? UserProfile { get; set; }
+    [JsonPropertyName("weeks")]
     public List<TrainingWeek> TrainingWeeks { get; set; } = [];
 }

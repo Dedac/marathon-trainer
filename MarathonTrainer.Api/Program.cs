@@ -11,6 +11,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<ITrainingPlanGenerator, TrainingPlanGenerator>();
 builder.Services.AddScoped<IMedicalAdjustmentService, MedicalAdjustmentService>();
 
