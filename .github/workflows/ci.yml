@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: .NET Build & Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          include-prerelease: true
+
+      - name: Restore dependencies
+        run: dotnet restore marathon-trainer.sln
+
+      - name: Build
+        run: dotnet build marathon-trainer.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test marathon-trainer.sln --no-build --configuration Release --verbosity normal
+
+  frontend:
+    name: Angular Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: marathon-trainer-client
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: marathon-trainer-client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npx ng build --configuration=production

@@ -8,7 +8,7 @@ public class GeneratePlanRequest
     public int UserProfileId { get; set; }
 
     [Required]
-    public string RaceType { get; set; } = string.Empty;
+    public RaceType RaceType { get; set; }
 
     [Required]
     public DateTime RaceDate { get; set; }

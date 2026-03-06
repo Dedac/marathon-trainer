@@ -69,14 +69,14 @@ export class TrainingCalendar implements OnInit {
 
   get totalPages(): number {
     if (!this.plan) return 0;
-    return Math.ceil(this.plan.weeks.length / PAGE_SIZE);
+    return Math.ceil(this.plan.trainingWeeks.length / PAGE_SIZE);
   }
 
   get visibleWeeks(): TrainingWeek[] {
     if (!this.plan) return [];
-    if (this.showAllWeeks) return this.plan.weeks;
+    if (this.showAllWeeks) return this.plan.trainingWeeks;
     const start = this.pageIndex * PAGE_SIZE;
-    return this.plan.weeks.slice(start, start + PAGE_SIZE);
+    return this.plan.trainingWeeks.slice(start, start + PAGE_SIZE);
   }
 
   get canGoPrev(): boolean {
@@ -111,8 +111,8 @@ export class TrainingCalendar implements OnInit {
     const start = new Date(this.plan.planStartDate);
     const diffMs = today.getTime() - start.getTime();
     const currentWeekNum = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1;
-    const week = this.plan.weeks.find((w) => w.weekNumber === currentWeekNum);
-    return week?.phase ?? this.plan.weeks[this.plan.weeks.length - 1]?.phase ?? '';
+    const week = this.plan.trainingWeeks.find((w) => w.weekNumber === currentWeekNum);
+    return week?.phase ?? this.plan.trainingWeeks[this.plan.trainingWeeks.length - 1]?.phase ?? '';
   }
 
   isPhaseActive(phase: string): boolean {
@@ -143,7 +143,7 @@ export class TrainingCalendar implements OnInit {
   getWeekDays(week: TrainingWeek): TrainingDay[] {
     const days: TrainingDay[] = [];
     for (let d = 0; d < 7; d++) {
-      const existing = week.days.find((day) => day.dayOfWeek === d);
+      const existing = week.trainingDays.find((day) => day.dayOfWeek === d);
       days.push(
         existing ?? {
           dayOfWeek: d,
@@ -253,7 +253,7 @@ export class TrainingCalendar implements OnInit {
     const start = new Date(this.plan.planStartDate);
     const diffMs = today.getTime() - start.getTime();
     const currentWeekNum = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1;
-    const weekIdx = this.plan.weeks.findIndex(
+    const weekIdx = this.plan.trainingWeeks.findIndex(
       (w) => w.weekNumber === currentWeekNum,
     );
     if (weekIdx >= 0) {

@@ -115,7 +115,7 @@ export class PlanSummary implements OnInit {
   }
 
   private computeStats(plan: TrainingPlan): void {
-    const weeks = plan.weeks ?? [];
+    const weeks = plan.trainingWeeks ?? [];
 
     // Race info
     this.raceTypeLabel =
@@ -182,7 +182,7 @@ export class PlanSummary implements OnInit {
     // Run type distribution
     const runCounts = new Map<string, number>();
     for (const w of weeks) {
-      for (const d of w.days ?? []) {
+      for (const d of w.trainingDays ?? []) {
         runCounts.set(d.runType, (runCounts.get(d.runType) ?? 0) + 1);
       }
     }
@@ -193,7 +193,7 @@ export class PlanSummary implements OnInit {
     // Long run progression
     this.longRuns = weeks
       .map((w) => {
-        const longRun = (w.days ?? []).find((d) => d.runType === RunType.LongRun);
+        const longRun = (w.trainingDays ?? []).find((d) => d.runType === RunType.LongRun);
         return longRun
           ? { weekNumber: w.weekNumber, distance: longRun.distanceMiles }
           : null;
@@ -203,7 +203,7 @@ export class PlanSummary implements OnInit {
     // Medical modifications
     const modsSet = new Set<string>();
     for (const w of weeks) {
-      for (const d of w.days ?? []) {
+      for (const d of w.trainingDays ?? []) {
         if (d.medicalModifications) {
           modsSet.add(d.medicalModifications);
         }
