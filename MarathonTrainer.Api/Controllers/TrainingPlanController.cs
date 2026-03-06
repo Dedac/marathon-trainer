@@ -17,9 +17,6 @@ public class TrainingPlanController(
     [HttpPost("generate")]
     public async Task<IActionResult> GeneratePlan(GeneratePlanRequest request)
     {
-        if (!Enum.TryParse<RaceType>(request.RaceType, ignoreCase: true, out var raceType))
-            return BadRequest($"Invalid RaceType '{request.RaceType}'. Valid values: {string.Join(", ", Enum.GetNames<RaceType>())}");
-
         var profile = await db.UserProfiles
             .Include(p => p.MedicalInfo)
             .Include(p => p.FitnessAssessment)
@@ -28,7 +25,7 @@ public class TrainingPlanController(
         if (profile is null)
             return NotFound($"UserProfile with ID {request.UserProfileId} not found.");
 
-        var plan = planGenerator.GeneratePlan(profile, raceType, request.RaceDate);
+        var plan = planGenerator.GeneratePlan(profile, request.RaceType, request.RaceDate);
 
         if (profile.MedicalInfo is not null)
             medicalAdjustment.AdjustPlan(plan, profile.MedicalInfo);

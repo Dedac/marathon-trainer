@@ -57,7 +57,7 @@ export interface TrainingWeek {
   totalMileage: number;
   isStepBackWeek: boolean;
   phase: string;
-  days: TrainingDay[];
+  trainingDays: TrainingDay[];
 }
 
 export interface TrainingPlan {
@@ -68,7 +68,7 @@ export interface TrainingPlan {
   planStartDate: string;
   totalWeeks: number;
   createdAt?: string;
-  weeks: TrainingWeek[];
+  trainingWeeks: TrainingWeek[];
 }
 
 export interface GeneratePlanRequest {
