@@ -1,0 +1,167 @@
+<!-- Loading spinner -->
+@if (loading) {
+  <div class="calendar-loading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading your training plan…</p>
+  </div>
+}
+
+<!-- Empty state -->
+@if (!loading && !plan) {
+  <mat-card class="empty-state">
+    <mat-card-content>
+      <mat-icon class="empty-icon">event_busy</mat-icon>
+      <h2>No Training Plan Yet</h2>
+      <p>Generate a personalized marathon training plan to get started.</p>
+      <a mat-raised-button color="primary" routerLink="/generate">
+        <mat-icon>add</mat-icon>
+        Generate Plan
+      </a>
+    </mat-card-content>
+  </mat-card>
+}
+
+<!-- Plan loaded -->
+@if (!loading && plan) {
+  <!-- Plan header -->
+  <mat-card class="plan-header">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="header-icon">directions_run</mat-icon>
+      <mat-card-title>
+        {{ plan.raceType === 'FullMarathon' ? 'Full Marathon' : 'Half Marathon' }} Training Plan
+      </mat-card-title>
+      <mat-card-subtitle>
+        Race Day: {{ plan.raceDate | date:'mediumDate' }} · {{ plan.totalWeeks }} weeks
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <!-- Phase progress indicator -->
+    <mat-card-content>
+      <div class="phase-progress">
+        @for (phase of allPhases; track phase) {
+          <div
+            class="phase-segment"
+            [class.phase-active]="isPhaseActive(phase)"
+            [class.phase-completed]="isPhaseCompleted(phase)"
+          >
+            <div class="phase-bar"></div>
+            <span class="phase-label">{{ phase }}</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Pagination controls -->
+  <div class="pagination-controls">
+    @if (!showAllWeeks) {
+      <button mat-button (click)="prevPage()" [disabled]="!canGoPrev">
+        <mat-icon>chevron_left</mat-icon>
+        Previous 4 Weeks
+      </button>
+      <span class="page-indicator">
+        Weeks {{ pageIndex * 4 + 1 }}–{{ pageIndex * 4 + visibleWeeks.length }} of {{ plan.totalWeeks }}
+      </span>
+      <button mat-button (click)="nextPage()" [disabled]="!canGoNext">
+        Next 4 Weeks
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    }
+    <button mat-button (click)="toggleShowAll()">
+      <mat-icon>{{ showAllWeeks ? 'view_module' : 'view_list' }}</mat-icon>
+      {{ showAllWeeks ? 'Paginate' : 'Show All Weeks' }}
+    </button>
+  </div>
+
+  <!-- Week cards -->
+  @for (week of visibleWeeks; track weekTrackId($index, week)) {
+    <mat-card
+      class="week-card"
+      [class.current-week]="isCurrentWeek(week)"
+      [class.step-back-week]="week.isStepBackWeek"
+    >
+      <!-- Week header -->
+      <mat-card-header class="week-header">
+        <mat-card-title class="week-title">
+          Week {{ week.weekNumber }}
+          @if (isCurrentWeek(week)) {
+            <mat-icon class="current-badge" matTooltip="Current week">today</mat-icon>
+          }
+        </mat-card-title>
+        <mat-card-subtitle class="week-meta">
+          <span
+            class="phase-chip"
+            [style.background-color]="getPhaseColor(week.phase)"
+          >
+            {{ week.phase }}
+          </span>
+          <span class="week-mileage">{{ week.totalMileage | number:'1.1-1' }} mi</span>
+          @if (week.isStepBackWeek) {
+            <span class="step-back-badge" matTooltip="Recovery week — reduced mileage">
+              <mat-icon>trending_down</mat-icon> Step-back
+            </span>
+          }
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <!-- Day grid -->
+      <mat-card-content>
+        <div class="day-grid">
+          @for (day of getWeekDays(week); track dayTrackId($index, day)) {
+            <div
+              class="day-cell {{ getDayCssClass(day) }}"
+              [class.day-expanded]="isDayExpanded(week.weekNumber, day.dayOfWeek)"
+              (click)="hasDetails(day) ? toggleDayExpansion(week.weekNumber, day.dayOfWeek) : null"
+              [class.day-clickable]="hasDetails(day)"
+            >
+              <div class="day-header">
+                <span class="day-name">{{ getDayName(day.dayOfWeek) }}</span>
+                <mat-icon
+                  class="run-type-icon"
+                  [style.color]="getRunTypeColor(day.runType)"
+                  [matTooltip]="day.runType"
+                >
+                  {{ getRunTypeIcon(day.runType) }}
+                </mat-icon>
+              </div>
+
+              <div class="day-body">
+                <span class="day-type-label">{{ day.runType }}</span>
+                @if (day.distanceMiles > 0) {
+                  <span class="day-distance">{{ day.distanceMiles | number:'1.1-1' }} mi</span>
+                }
+                @if (getPaceDisplay(day); as pace) {
+                  <span class="day-pace">{{ pace }}</span>
+                }
+              </div>
+
+              @if (hasDetails(day)) {
+                <mat-icon class="expand-hint">
+                  {{ isDayExpanded(week.weekNumber, day.dayOfWeek) ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+              }
+
+              <!-- Expanded details -->
+              @if (isDayExpanded(week.weekNumber, day.dayOfWeek)) {
+                <div class="day-details" (click)="$event.stopPropagation()">
+                  @if (day.notes) {
+                    <div class="detail-section">
+                      <strong>Notes</strong>
+                      <p>{{ day.notes }}</p>
+                    </div>
+                  }
+                  @if (day.medicalModifications) {
+                    <div class="detail-section medical-mod">
+                      <strong><mat-icon>medical_services</mat-icon> Medical Modifications</strong>
+                      <p>{{ day.medicalModifications }}</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+}

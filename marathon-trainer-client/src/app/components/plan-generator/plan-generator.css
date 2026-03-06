@@ -1,0 +1,175 @@
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.plan-generator-container {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.profile-summary-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-item .label {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-item .value {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.medical-section {
+  margin-top: 16px;
+}
+
+.medical-section h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.condition-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.no-profile-card {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.no-profile-card mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: rgba(0, 0, 0, 0.38);
+  margin-bottom: 16px;
+}
+
+.no-profile-card p {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
+  margin-bottom: 16px;
+}
+
+.form-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.race-type-section,
+.race-date-section {
+  margin-bottom: 24px;
+}
+
+.race-type-section label,
+.race-date-section label {
+  display: block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
+  margin-bottom: 8px;
+}
+
+.race-type-toggle {
+  width: 100%;
+}
+
+.race-type-toggle mat-button-toggle {
+  flex: 1;
+}
+
+.race-date-field {
+  width: 100%;
+}
+
+.generate-button {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.loading-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+}
+
+.loading-overlay p {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :host {
+    padding: 16px 12px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .race-type-toggle {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .race-type-toggle mat-button-toggle {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    padding: 12px 8px;
+  }
+
+  .profile-item .value {
+    font-size: 14px;
+  }
+}

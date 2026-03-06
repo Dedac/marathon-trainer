@@ -1,0 +1,125 @@
+@if (loading) {
+  <div class="plan-generator-container">
+    <div class="loading-overlay">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>{{ generatingPlan ? 'Generating your training plan...' : 'Loading profile...' }}</p>
+    </div>
+  </div>
+} @else {
+  <div class="plan-generator-container">
+    <h1 class="page-title">Generate Training Plan</h1>
+
+    @if (!profile) {
+      <mat-card class="no-profile-card">
+        <mat-card-content>
+          <mat-icon>person_outline</mat-icon>
+          <p>You need to create a profile before generating a training plan.</p>
+          <a mat-raised-button color="primary" routerLink="/profile">Create Profile</a>
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <!-- Profile Summary -->
+      <mat-card class="profile-summary-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>person</mat-icon>
+          <mat-card-title>{{ profile.name }}</mat-card-title>
+          <mat-card-subtitle>Runner Profile Summary</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <span class="label">Experience</span>
+              <span class="value">{{ profile.runningExperience }}</span>
+            </div>
+            <div class="profile-item">
+              <span class="label">Weekly Mileage</span>
+              <span class="value">{{ profile.currentWeeklyMileage }} mi</span>
+            </div>
+            <div class="profile-item">
+              <span class="label">Run Days / Week</span>
+              <span class="value">{{ profile.preferredRunDaysPerWeek }} days</span>
+            </div>
+            <div class="profile-item">
+              <span class="label">Long Run Day</span>
+              <span class="value">{{ dayOfWeekLabel(profile.longRunDay) }}</span>
+            </div>
+          </div>
+
+          @if (profile.medicalInfo) {
+            <div class="medical-section">
+              <h4>Medical Conditions</h4>
+              <div class="condition-chips">
+                @if (activeConditions.length === 0) {
+                  <mat-chip highlighted>None reported</mat-chip>
+                } @else {
+                  @for (condition of activeConditions; track condition.label) {
+                    <mat-chip class="active-condition" highlighted>
+                      ⚠ {{ condition.label }}
+                    </mat-chip>
+                  }
+                }
+                @if (profile.medicalInfo.doctorClearance) {
+                  <mat-chip highlighted color="primary">✓ Doctor Cleared</mat-chip>
+                }
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Plan Configuration Form -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>directions_run</mat-icon>
+          <mat-card-title>Plan Configuration</mat-card-title>
+          <mat-card-subtitle>Choose your race details</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="planForm" (ngSubmit)="onGenerate()">
+            <div class="race-type-section">
+              <label>Race Type</label>
+              <mat-button-toggle-group formControlName="raceType" class="race-type-toggle">
+                <mat-button-toggle [value]="RaceType.HalfMarathon">
+                  🏃‍♂️ Half Marathon
+                </mat-button-toggle>
+                <mat-button-toggle [value]="RaceType.FullMarathon">
+                  🏃‍♂️ Full Marathon
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+
+            <div class="race-date-section">
+              <mat-form-field class="race-date-field" appearance="outline">
+                <mat-label>Race Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="raceDate" [min]="minRaceDate">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-hint>Must be at least 12 weeks from today</mat-hint>
+                @if (planForm.controls['raceDate'].hasError('matDatepickerMin')) {
+                  <mat-error>Race date must be at least 12 weeks from today</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            @if (errorMessage) {
+              <p class="error-message">{{ errorMessage }}</p>
+            }
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              class="generate-button"
+              [disabled]="planForm.invalid || generatingPlan">
+              @if (generatingPlan) {
+                <mat-spinner diameter="24"></mat-spinner>
+              } @else {
+                Generate Plan
+              }
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}

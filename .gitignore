@@ -1,0 +1,23 @@
+# .NET
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+*.user
+*.suo
+.vs/
+
+# Angular
+marathon-trainer-client/node_modules/
+marathon-trainer-client/dist/
+marathon-trainer-client/.angular/
+
+# IDE
+.idea/
+*.swp
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

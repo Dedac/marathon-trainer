@@ -1,0 +1,101 @@
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+mat-card {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+}
+
+mat-card-title {
+  margin-bottom: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.5rem;
+}
+
+.form-grid mat-form-field,
+.form-grid .full-width {
+  width: 100%;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.checkbox-group mat-checkbox {
+  display: block;
+}
+
+.submit-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+mat-error {
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  :host {
+    margin: 1rem auto;
+    padding: 0 0.75rem;
+  }
+
+  mat-card {
+    padding: 1rem 0.75rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-section {
+    justify-content: stretch;
+  }
+
+  .submit-section button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    padding: 0 0.5rem;
+  }
+
+  mat-card {
+    padding: 0.75rem 0.5rem;
+  }
+}

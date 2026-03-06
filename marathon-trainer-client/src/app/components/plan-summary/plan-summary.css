@@ -1,0 +1,330 @@
+/* Loading & Empty State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.loading-container mat-progress-bar {
+  max-width: 400px;
+  width: 100%;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #9e9e9e;
+}
+
+.empty-state h2 {
+  margin: 0.5rem 0 0;
+  font-weight: 500;
+}
+
+.empty-state p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Dashboard */
+.dashboard {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Race Header */
+.race-header {
+  text-align: center;
+}
+
+.race-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.race-date {
+  color: #555;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* Stat Cards */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.stat-card mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+}
+
+.stat-icon {
+  color: #1976d2;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #212121;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #757575;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Section */
+.section h2 {
+  text-align: center;
+  font-weight: 500;
+  color: #424242;
+  margin: 0;
+}
+
+/* Bar Chart */
+.chart-card {
+  overflow: visible;
+}
+
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0.5rem 0;
+}
+
+.bar-chart-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bar-label {
+  width: 48px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: #616161;
+  text-align: right;
+}
+
+.bar-track {
+  flex: 1;
+  height: 20px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 120px;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.bar-value {
+  width: 56px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: #424242;
+  font-weight: 500;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #616161;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Phase Breakdown */
+.phase-bar {
+  display: flex;
+  height: 32px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.phase-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 6px;
+}
+
+.phase-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Run Type Distribution */
+.run-type-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.run-type-name {
+  flex: 1;
+}
+
+.run-type-count {
+  font-weight: 600;
+  color: #424242;
+  margin-left: auto;
+  padding-left: 1rem;
+}
+
+/* Long Run Table */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.long-run-table {
+  width: 100%;
+}
+
+.no-data {
+  color: #9e9e9e;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+/* Medical Card */
+.medical-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+/* Responsive — Tablet */
+@media (max-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive — Mobile */
+@media (max-width: 768px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+
+  .dashboard {
+    padding: 1rem 0.75rem;
+  }
+
+  .race-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .bar-chart {
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-label {
+    width: 36px;
+    font-size: 0.7rem;
+  }
+
+  .bar-value {
+    width: 48px;
+    font-size: 0.7rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard {
+    padding: 0.75rem 0.5rem;
+  }
+}

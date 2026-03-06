@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarathonTrainer.Api", "MarathonTrainer.Api\MarathonTrainer.Api.csproj", "{DAABB621-DDBE-0EC6-5E9C-5D49E4F7DB5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarathonTrainer.Api.Tests", "MarathonTrainer.Api.Tests\MarathonTrainer.Api.Tests.csproj", "{EBB982AE-0B1A-F232-9129-7D2BE600679F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DAABB621-DDBE-0EC6-5E9C-5D49E4F7DB5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAABB621-DDBE-0EC6-5E9C-5D49E4F7DB5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAABB621-DDBE-0EC6-5E9C-5D49E4F7DB5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAABB621-DDBE-0EC6-5E9C-5D49E4F7DB5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBB982AE-0B1A-F232-9129-7D2BE600679F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB982AE-0B1A-F232-9129-7D2BE600679F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBB982AE-0B1A-F232-9129-7D2BE600679F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBB982AE-0B1A-F232-9129-7D2BE600679F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B07EB7B3-DC4E-45EB-8134-66F24916BA48}
+	EndGlobalSection
+EndGlobal

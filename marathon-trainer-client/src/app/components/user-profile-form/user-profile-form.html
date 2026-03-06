@@ -1,0 +1,175 @@
+<div class="loading-container" *ngIf="loading">
+  <mat-spinner diameter="48"></mat-spinner>
+</div>
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+  <h1>{{ isEditing ? 'Edit' : 'Create' }} Your Runner Profile</h1>
+
+  <!-- Personal Info -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Personal Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+          <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" />
+          <mat-error *ngIf="profileForm.get('age')?.hasError('required')">Age is required</mat-error>
+          <mat-error *ngIf="profileForm.get('age')?.hasError('min')">Must be at least 13</mat-error>
+          <mat-error *ngIf="profileForm.get('age')?.hasError('max')">Must be 100 or under</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Weight (lbs)</mat-label>
+          <input matInput type="number" formControlName="weightLbs" />
+          <mat-error *ngIf="profileForm.get('weightLbs')?.hasError('required')">Weight is required</mat-error>
+          <mat-error *ngIf="profileForm.get('weightLbs')?.hasError('min')">Must be greater than 0</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Height (inches)</mat-label>
+          <input matInput type="number" formControlName="heightInches" />
+          <mat-error *ngIf="profileForm.get('heightInches')?.hasError('required')">Height is required</mat-error>
+          <mat-error *ngIf="profileForm.get('heightInches')?.hasError('min')">Must be greater than 0</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let g of genderOptions" [value]="g">{{ g }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="profileForm.get('gender')?.hasError('required')">Gender is required</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Running Experience -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Running Experience</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Current Weekly Mileage</mat-label>
+          <input matInput type="number" formControlName="currentWeeklyMileage" />
+          <mat-error *ngIf="profileForm.get('currentWeeklyMileage')?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="profileForm.get('currentWeeklyMileage')?.hasError('min')">Must be 0 or more</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Running Experience</mat-label>
+          <mat-select formControlName="runningExperience">
+            <mat-option *ngFor="let exp of experienceOptions" [value]="exp">{{ exp }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="profileForm.get('runningExperience')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Preferred Run Days Per Week</mat-label>
+          <mat-select formControlName="preferredRunDaysPerWeek">
+            <mat-option *ngFor="let d of runDaysOptions" [value]="d">{{ d }} days</mat-option>
+          </mat-select>
+          <mat-error *ngIf="profileForm.get('preferredRunDaysPerWeek')?.hasError('min')">Minimum 3 days</mat-error>
+          <mat-error *ngIf="profileForm.get('preferredRunDaysPerWeek')?.hasError('max')">Maximum 6 days</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Long Run Day</mat-label>
+          <mat-select formControlName="longRunDay">
+            <mat-option *ngFor="let day of daysOfWeek; let i = index" [value]="i">{{ day }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="profileForm.get('longRunDay')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Fitness Assessment -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Fitness Assessment</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Current Longest Run (miles)</mat-label>
+          <input matInput type="number" formControlName="currentLongestRunMiles" />
+          <mat-error *ngIf="profileForm.get('currentLongestRunMiles')?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="profileForm.get('currentLongestRunMiles')?.hasError('min')">Must be 0 or more</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Recent Race Distance (miles, optional)</mat-label>
+          <input matInput type="number" formControlName="recentRaceDistanceMiles" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Comfortable Pace (min/mile)</mat-label>
+          <input matInput type="number" step="0.1" formControlName="comfortablePaceMinutesPerMile" />
+          <mat-error *ngIf="profileForm.get('comfortablePaceMinutesPerMile')?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="profileForm.get('comfortablePaceMinutesPerMile')?.hasError('min')">Minimum 4.0 min/mile</mat-error>
+          <mat-error *ngIf="profileForm.get('comfortablePaceMinutesPerMile')?.hasError('max')">Maximum 20.0 min/mile</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Resting Heart Rate (optional)</mat-label>
+          <input matInput type="number" formControlName="restingHeartRate" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cross Training Preferences (optional)</mat-label>
+          <input matInput formControlName="crossTrainingPreferences" />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Medical Information -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Medical Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="checkbox-group">
+        <mat-checkbox formControlName="hasKneeIssues">Knee Issues</mat-checkbox>
+        <mat-checkbox formControlName="hasPlantarFasciitis">Plantar Fasciitis</mat-checkbox>
+        <mat-checkbox formControlName="hasAsthma">Asthma</mat-checkbox>
+        <mat-checkbox formControlName="hasHeartCondition">Heart Condition</mat-checkbox>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="form-grid" style="margin-top: 1rem;">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Recent Injuries (optional)</mat-label>
+          <textarea matInput formControlName="recentInjuries" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Medications Affecting Heart Rate (optional)</mat-label>
+          <input matInput formControlName="medicationsAffectingHeartRate" />
+        </mat-form-field>
+
+        <mat-checkbox formControlName="doctorClearance" class="full-width">
+          I have received doctor clearance for marathon training
+        </mat-checkbox>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="submit-section">
+    <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid || saving">
+      <mat-spinner *ngIf="saving" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+      {{ isEditing ? 'Update Profile' : 'Save Profile' }}
+    </button>
+  </div>
+</form>

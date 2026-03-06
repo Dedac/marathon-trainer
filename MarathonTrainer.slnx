@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MarathonTrainer.Api.Tests/MarathonTrainer.Api.Tests.csproj" />
+  <Project Path="MarathonTrainer.Api/MarathonTrainer.Api.csproj" />
+</Solution>

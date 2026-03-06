@@ -1,0 +1,209 @@
+@if (loading) {
+  <div class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Loading your training plan&hellip;</p>
+  </div>
+} @else if (!plan) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">directions_run</mat-icon>
+    <h2>No Training Plan Yet</h2>
+    <p>Generate your personalized marathon training plan to get started.</p>
+    <a mat-raised-button color="primary" routerLink="/generate">
+      <mat-icon>add</mat-icon>
+      Generate Plan
+    </a>
+  </div>
+} @else {
+  <div class="dashboard">
+    <!-- Race Info Header -->
+    <div class="race-header">
+      <h1>{{ raceTypeLabel }} Training Plan</h1>
+      <p class="race-date">Race Day: {{ raceDateFormatted }}</p>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon class="stat-icon">straighten</mat-icon>
+          <div class="stat-value">{{ totalMiles }}</div>
+          <div class="stat-label">Total Miles</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+          <div class="stat-value">{{ peakWeekMileage }}</div>
+          <div class="stat-label">Peak Week Mileage (Wk {{ peakWeekNumber }})</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon class="stat-icon">calendar_today</mat-icon>
+          <div class="stat-value">{{ totalWeeks }}</div>
+          <div class="stat-label">Total Weeks</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon class="stat-icon">timer</mat-icon>
+          <div class="stat-value">{{ weeksUntilRace }}</div>
+          <div class="stat-label">Weeks Until Race</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Average Weekly Mileage -->
+    <div class="section">
+      <h2>Average Weekly Mileage: {{ averageWeeklyMileage }} mi</h2>
+    </div>
+
+    <!-- Weekly Mileage Chart -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Weekly Mileage</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="bar-chart-scroll">
+        <div class="bar-chart">
+          @for (entry of weeklyChart; track entry.weekNumber) {
+            <div class="bar-row">
+              <span class="bar-label">Wk {{ entry.weekNumber }}</span>
+              <div class="bar-track">
+                <div
+                  class="bar-fill"
+                  [style.width.%]="entry.barWidthPercent"
+                  [style.background-color]="getPhaseColor(entry.phase)"
+                ></div>
+              </div>
+              <span class="bar-value">{{ entry.mileage }} mi</span>
+            </div>
+          }
+        </div>
+        </div>
+        <div class="chart-legend">
+          @for (phase of phases; track phase.phase) {
+            <span class="legend-item">
+              <span class="legend-swatch" [style.background-color]="getPhaseColor(phase.phase)"></span>
+              {{ phase.phase }}
+            </span>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Phase Breakdown -->
+    <mat-card class="phase-card">
+      <mat-card-header>
+        <mat-card-title>Phase Breakdown</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="phase-bar">
+          @for (phase of phases; track phase.phase) {
+            <div
+              class="phase-segment"
+              [style.flex-basis.%]="phase.percent"
+              [style.background-color]="getPhaseColor(phase.phase)"
+            >
+              {{ phase.phase }}
+            </div>
+          }
+        </div>
+        <mat-chip-set class="phase-chips">
+          @for (phase of phases; track phase.phase) {
+            <mat-chip [style.--mdc-chip-elevated-container-color]="getPhaseColor(phase.phase)"
+                      [style.--mdc-chip-label-text-color]="'#fff'">
+              {{ phase.phase }}: {{ phase.weeks }} {{ phase.weeks === 1 ? 'week' : 'weeks' }}
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Run Type Distribution -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Run Type Distribution</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          @for (rt of runTypeCounts; track rt.runType) {
+            <mat-list-item>
+              <span class="run-type-indicator" [style.background-color]="getRunTypeColor(rt.runType)"></span>
+              <span class="run-type-name">{{ rt.runType }}</span>
+              <span class="run-type-count">{{ rt.count }}</span>
+            </mat-list-item>
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Long Run Progression -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Long Run Progression</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (longRuns.length === 0) {
+          <p class="no-data">No long runs in plan.</p>
+        } @else {
+          <div class="table-wrapper">
+          <table mat-table [dataSource]="longRuns" class="long-run-table">
+            <ng-container matColumnDef="week">
+              <th mat-header-cell *matHeaderCellDef>Week</th>
+              <td mat-cell *matCellDef="let row">{{ row.weekNumber }}</td>
+            </ng-container>
+            <ng-container matColumnDef="distance">
+              <th mat-header-cell *matHeaderCellDef>Distance (mi)</th>
+              <td mat-cell *matCellDef="let row">{{ row.distance }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['week', 'distance']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['week', 'distance']"></tr>
+          </table>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Medical Modifications -->
+    <mat-card class="medical-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>medical_services</mat-icon>
+          Medical Modifications
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (medicalModifications.length === 0) {
+          <p class="no-data">No medical modifications applied.</p>
+        } @else {
+          <mat-list>
+            @for (mod of medicalModifications; track mod) {
+              <mat-list-item>
+                <mat-icon matListItemIcon>info</mat-icon>
+                <span>{{ mod }}</span>
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <a mat-raised-button color="primary" routerLink="/generate">
+        <mat-icon>add</mat-icon>
+        Generate New Plan
+      </a>
+      <a mat-raised-button color="accent" routerLink="/plan">
+        <mat-icon>calendar_month</mat-icon>
+        View Full Calendar
+      </a>
+    </div>
+  </div>
+}
